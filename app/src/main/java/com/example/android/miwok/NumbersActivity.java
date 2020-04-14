@@ -17,6 +17,11 @@ package com.example.android.miwok;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class NumbersActivity extends AppCompatActivity {
 
@@ -24,5 +29,61 @@ public class NumbersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numbers);
+
+//        String [] numbers = new String[10];
+//        numbers[0] = "One";
+//        numbers[1] = "Two";
+//        numbers[2] = "Three";
+//        numbers[3] = "Four";
+//        numbers[4] = "Five";
+//        numbers[5] = "Six";
+//        numbers[6] = "Seven";
+//        numbers[7] = "Eight";
+//        numbers[8] = "Nine";
+//        numbers[9] = "Ten";
+
+        ArrayList<String> numbers = new ArrayList<String>();
+        numbers.add("One") ;
+        numbers.add("Two");
+        numbers.add("Three");
+        numbers.add("Four");
+        numbers.add("Five");
+        numbers.add("Six");
+        numbers.add("Seven");
+        numbers.add("Eight");
+        numbers.add("Nine");
+        numbers.add("Ten");
+
+
+    //        No loop - prints number(0);
+
+//        LinearLayout rootView = (LinearLayout) findViewById(R.id.rootView);
+//        TextView childView = new TextView(this); // creating a temporary child TextView . It's not made or displayed in the XML. It's simply a container to place text.
+//        childView.setText(numbers.get(0));
+//        rootView.addView(childView); // addView is a method that displays a view!
+
+
+    //        Loop using FOR loop
+
+        LinearLayout rootView = (LinearLayout) findViewById(R.id.rootView);
+
+        for (int i = 0; i < numbers.size(); i++) {
+            TextView childView = new TextView(this); // creating a temporary child TextView . It's not made or displayed in the XML. It's simply a container to place text.
+            childView.setText(numbers.get(i));
+            rootView.addView(childView); // addView is a method that displays a view!
+        }
+
+
+    //        Loop using While loop
+
+//        LinearLayout rootView = (LinearLayout) findViewById(R.id.rootView);
+//
+//        int i = 0;
+//        while (i < numbers.size()) {
+//            TextView childView = new TextView(this); // creating a temporary child TextView . It's not made or displayed in the XML. It's simply a container to place text.
+//            childView.setText(numbers.get(i));
+//            rootView.addView(childView); // addView is a method that displays a view!
+//            i++;
+//        }
     }
 }

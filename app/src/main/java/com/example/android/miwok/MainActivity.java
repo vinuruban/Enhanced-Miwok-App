@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Create a new intent to open the {@link NumbersActivity}
-                Intent coloursIntent = new Intent(MainActivity.this, PhrasesActivity.class);
+                Intent coloursIntent = new Intent(MainActivity.this, ColoursActivity.class);
                 // Start the new activity
                 startActivity(coloursIntent);
             }

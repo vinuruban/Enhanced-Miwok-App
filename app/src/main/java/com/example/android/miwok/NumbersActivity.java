@@ -15,13 +15,21 @@
  */
 package com.example.android.miwok;
 
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 
+import java.awt.font.NumericShaper;
 import java.util.ArrayList;
 
 public class NumbersActivity extends AppCompatActivity {
+
+    private MediaPlayer mediaPlayer; //it's a global variable since media songs needs to be remembered
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +62,18 @@ public class NumbersActivity extends AppCompatActivity {
 //        6) Finally passed the adapter object into the ListView!
 
 
-        ArrayList<Word> words = new ArrayList<Word>();
+        final ArrayList<Word> words = new ArrayList<Word>();
 
-        words.add(new Word("utti", "one", R.drawable.number_one));
-        words.add(new Word("otiiko", "two", R.drawable.number_two));
-        words.add(new Word("tolookosu", "three", R.drawable.number_three));
-        words.add(new Word("oyyisa", "four", R.drawable.number_four));
-        words.add(new Word("massokka", "five", R.drawable.number_five));
-        words.add(new Word("temmoka", "six", R.drawable.number_six));
-        words.add(new Word("kenekaku", "seven", R.drawable.number_seven));
-        words.add(new Word("kawinta", "eight", R.drawable.number_eight));
-        words.add(new Word("wo'e", "nine", R.drawable.number_nine));
-        words.add(new Word("na'aacha", "ten", R.drawable.number_ten));
+        words.add(new Word("utti", "one", R.drawable.number_one, R.raw.number_one));
+        words.add(new Word("otiiko", "two", R.drawable.number_two, R.raw.number_two));
+        words.add(new Word("tolookosu", "three", R.drawable.number_three, R.raw.number_three));
+        words.add(new Word("oyyisa", "four", R.drawable.number_four, R.raw.number_four));
+        words.add(new Word("massokka", "five", R.drawable.number_five, R.raw.number_five));
+        words.add(new Word("temmoka", "six", R.drawable.number_six, R.raw.number_six));
+        words.add(new Word("kenekaku", "seven", R.drawable.number_seven, R.raw.number_seven));
+        words.add(new Word("kawinta", "eight", R.drawable.number_eight, R.raw.number_eight));
+        words.add(new Word("wo'e", "nine", R.drawable.number_nine, R.raw.number_nine));
+        words.add(new Word("na'aacha", "ten", R.drawable.number_ten, R.raw.number_ten));
 
         // Create an {@link WordAdapter}, whose data source is a list of {@link Word}s. The
         // adapter knows how to create list items for each item in the list.
@@ -79,6 +87,17 @@ public class NumbersActivity extends AppCompatActivity {
         // Make the {@link ListView} use the {@link WordAdapter} we created above, so that the
         // {@link ListView} will display list items for each {@link Word} in the list.
         listView.setAdapter(adapter);
+
+        // set media player
+        // OnItemClickListener since we are clicking the view, not a button!
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Word word = words.get(position); //stores the single word object that's clicked
+                mediaPlayer = MediaPlayer.create(NumbersActivity.this, word.getMediaResourceId()); //since we passed in the mediaLocation into the object and created a get method, we were able to get the resourceID of the word that was clicked here!
+                mediaPlayer.start();
+            }
+        });
 
 
 //        The below only displayed one word per line. This is because when googling LAYOUT "simple_list_item_", we found out that it's XML file only had one TextView element. Also "ArrayAdapter<String>...numbers)" only allows one input

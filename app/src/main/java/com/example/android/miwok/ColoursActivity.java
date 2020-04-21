@@ -15,18 +15,27 @@
  */
 package com.example.android.miwok;
 
+import android.app.Activity;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class ColoursActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
+    private MediaPlayer.OnCompletionListener completeListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mediaPlayer){
+            releaseMediaPlayer();
+            Toast.makeText(ColoursActivity.this,"I'm done!",Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +61,24 @@ public class ColoursActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Word word = words.get(position);
+
+                releaseMediaPlayer();
+
                 mediaPlayer = MediaPlayer.create(ColoursActivity.this, word.getMediaResourceId());
+                mediaPlayer.start();
+
+                mediaPlayer.setOnCompletionListener(completeListener);
             }
         });
 
+
     }
+
+    private void releaseMediaPlayer() {
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
 }

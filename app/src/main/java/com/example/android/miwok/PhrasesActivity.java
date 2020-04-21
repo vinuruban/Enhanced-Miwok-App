@@ -73,6 +73,12 @@ public class PhrasesActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();  // Always call the superclass method first
+        releaseMediaPlayer();
+    }
+
     private void releaseMediaPlayer() {
         if (mediaPlayer != null) {
             mediaPlayer.release();

@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.awt.font.NumericShaper;
 import java.util.ArrayList;
@@ -30,6 +31,14 @@ import java.util.ArrayList;
 public class NumbersActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer; //it's a global variable since media songs needs to be remembered
+
+    private MediaPlayer.OnCompletionListener completeListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mediaPlayer){
+            releaseMediaPlayer(); // Cleans up the media player by releasing its resources.
+            Toast.makeText(NumbersActivity.this,"I'm done!",Toast.LENGTH_SHORT).show();
+        }
+    }; //This same object was created and called repeatedly. Therefore, we set it as the global variable.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +103,35 @@ public class NumbersActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Word word = words.get(position); //stores the single word object that's clicked
+
+                releaseMediaPlayer(); // the setOnCompletionListener below only gets called only if the song is completed. What if we interrupt a media while its playing and we click to play the next song? in that case, we can this method here and empty mediaPlayer!
+
                 mediaPlayer = MediaPlayer.create(NumbersActivity.this, word.getMediaResourceId()); //since we passed in the mediaLocation into the object and created a get method, we were able to get the resourceID of the word that was clicked here!
                 mediaPlayer.start();
+
+                // the method gets called when the media stops - it's an async callback
+                // every the below is called, the previously used to create the same object repeatedly. The method created within the object is generic too. Therefore, we set the object as a global variable and we will only call the variable here (completeListener)
+                // if we simply just call the releaseMediaPlayer() instead of passing the method into the below, media would have immediately stopped as soon as it starts to play. Hence the below.
+                mediaPlayer.setOnCompletionListener(completeListener);
             }
         });
+    }
+
+    private void releaseMediaPlayer() {
+        // If the media player is not null, then it may be currently playing a sound.
+        if (mediaPlayer != null) {
+            // Regardless of the current state of the media player, release its resources
+            // because we no longer need it.
+            mediaPlayer.release();
+
+            // Set the media player back to null. For our code, we've decided that
+            // setting the media player to null is an easy way to tell that the media player
+            // is not configured to play an audio file at the moment.
+            mediaPlayer = null;
+        }
+    }
+
+}
 
 
 //        The below only displayed one word per line. This is because when googling LAYOUT "simple_list_item_", we found out that it's XML file only had one TextView element. Also "ArrayAdapter<String>...numbers)" only allows one input
@@ -148,5 +182,4 @@ public class NumbersActivity extends AppCompatActivity {
 //            rootView.addView(childView); // addView is a method that displays a view!
 //            i++;
 //        }
-    }
-}
+

@@ -15,6 +15,8 @@
  */
 package com.example.android.miwok;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,6 +41,30 @@ public class NumbersActivity extends AppCompatActivity {
             Toast.makeText(NumbersActivity.this,"I'm done!",Toast.LENGTH_SHORT).show();
         }
     }; //This same object was created and called repeatedly. Therefore, we set it as the global variable.
+
+    private AudioManager audioManager;
+
+    private AudioManager.OnAudioFocusChangeListener afChangeListener =
+            new AudioManager.OnAudioFocusChangeListener() {
+                public void onAudioFocusChange(int focusChange) {
+                    if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) { //if temporary loss of audio or if temporary loss of audio with an option to lower volume
+                        // IN OUR CASE, the sound should be paused if i pull down to dropdown menu, if i try playing a Miwok word during a call or whilst playing spotify
+                        mediaPlayer.pause();
+                        mediaPlayer.seekTo(0); //this sets the music back to second 0. Since our audio is short, it's okay to play from beginning if interrupted
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                        // Resume playback, because you hold the Audio Focus
+                        // again!
+                        // i.e. the phone call ended or the nav directions
+                        // are finished
+                        // If you implement ducking and lower the volume, be
+                        // sure to return it to normal here, as well.
+                        mediaPlayer.start();
+                    }
+                    else if (focusChange == AudioManager.AUDIOFOCUS_LOSS){ //if we've lost audio focus
+                        releaseMediaPlayer(); //stop playback and cleanup resources
+                    }
+                }
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +96,7 @@ public class NumbersActivity extends AppCompatActivity {
 //        5) Created a WordAdapter object called "adapter"
 //        6) Finally passed the adapter object into the ListView!
 
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE); //instantiating audioManager object
 
         final ArrayList<Word> words = new ArrayList<Word>();
 
@@ -106,15 +133,34 @@ public class NumbersActivity extends AppCompatActivity {
 
                 releaseMediaPlayer(); // the setOnCompletionListener below only gets called only if the song is completed. What if we interrupt a media while its playing and we click to play the next song? in that case, we can this method here and empty mediaPlayer!
 
-                mediaPlayer = MediaPlayer.create(NumbersActivity.this, word.getMediaResourceId()); //since we passed in the mediaLocation into the object and created a get method, we were able to get the resourceID of the word that was clicked here!
-                mediaPlayer.start();
 
-                // the method gets called when the media stops - it's an async callback
-                // every the below is called, the previously used to create the same object repeatedly. The method created within the object is generic too. Therefore, we set the object as a global variable and we will only call the variable here (completeListener)
-                // if we simply just call the releaseMediaPlayer() instead of passing the method into the below, media would have immediately stopped as soon as it starts to play. Hence the below.
-                mediaPlayer.setOnCompletionListener(completeListener);
+        // Request audio focus for playback
+                int result = audioManager.requestAudioFocus(afChangeListener,
+                        // Use the music stream.
+                        AudioManager.STREAM_MUSIC, //type of audio
+                        // Request permanent focus.
+                        AudioManager.AUDIOFOCUS_GAIN_TRANSIENT); // how long to request audio for - our Miwok song is short hence why we picked AUDIOFOCUS_GAIN_TRANSIENT
+
+                if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) { //this means we successfully gained audio focus
+                    // Start playback
+                    mediaPlayer = MediaPlayer.create(NumbersActivity.this, word.getMediaResourceId()); //since we passed in the mediaLocation into the object and created a get method, we were able to get the resourceID of the word that was clicked here!
+                    mediaPlayer.start();
+
+                    // the method gets called when the media stops - it's an async callback
+                    // every the below is called, the previously used to create the same object repeatedly. The method created within the object is generic too. Therefore, we set the object as a global variable and we will only call the variable here (completeListener)
+                    // if we simply just call the releaseMediaPlayer() instead of passing the method into the below, media would have immediately stopped as soon as it starts to play. Hence the below.
+                    mediaPlayer.setOnCompletionListener(completeListener);
+                }
+
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();  // Always call the superclass method first
+        releaseMediaPlayer();
+        audioManager.abandonAudioFocus(afChangeListener); // Abandon audio focus when playback complete
     }
 
     private void releaseMediaPlayer() {

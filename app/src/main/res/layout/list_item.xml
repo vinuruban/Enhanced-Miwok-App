@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--These has are the elements for a single line. This gets looped by the ArrayAdapter so don't worry-->
+
+<!--    Instead of wrapping this up as we did in activity_main.xml, we simply put one line of code in activity_words.xml which does the same job! - android:drawSelectorOnTop="true"-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"

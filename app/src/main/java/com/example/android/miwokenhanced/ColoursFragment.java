@@ -35,6 +35,7 @@ public class ColoursFragment extends Fragment {
 
     private AudioManager.OnAudioFocusChangeListener afChangeListener =
             new AudioManager.OnAudioFocusChangeListener() {
+                @Override
                 public void onAudioFocusChange(int focusChange) {
                     if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
                         mediaPlayer.pause();
@@ -79,6 +80,7 @@ public class ColoursFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Word word = words.get(position);
 
                 releaseMediaPlayer();
@@ -102,13 +104,13 @@ public class ColoursFragment extends Fragment {
     public void onStop() {
         super.onStop();
         releaseMediaPlayer();
-        audioManager.abandonAudioFocus(afChangeListener);
     }
 
     private void releaseMediaPlayer() {
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
+            audioManager.abandonAudioFocus(afChangeListener);
         }
     }
 }

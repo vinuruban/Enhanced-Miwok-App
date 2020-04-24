@@ -15,78 +15,39 @@
  */
 package com.example.android.miwokenhanced;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_main);
 
+        // Find the view pager that will allow the user to swipe between fragments
+        //////////Similar to ListView!
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-//        onClick handler for Number text
-        TextView numbers = (TextView) findViewById(R.id.numbers);
-        // Set a click listener on that View
-        numbers.setOnClickListener(new OnClickListener() {
-            // The code in this method will be executed when the numbers category is clicked on.
-            @Override
-            public void onClick(View view) {
-                // Create a new intent to open the {@link NumbersActivity}
-                Intent numbersIntent = new Intent(MainActivity.this, NumbersActivity.class);
-                // Start the new activity
-                startActivity(numbersIntent);
-            }
-        });
+        // Create an adapter that knows which fragment should be shown on each page
+        //////////Similar to WordAdapter - ArrayAdapter!
+        MiwokFragmentPagerAdapter adapter = new MiwokFragmentPagerAdapter(this, getSupportFragmentManager());
 
+        // Set the adapter onto the view pager
+        viewPager.setAdapter(adapter);
 
-        //        onClick handler for Family text
-        TextView family = (TextView) findViewById(R.id.family);
-        // Set a click listener on that View
-        family.setOnClickListener(new OnClickListener() {
-            // The code in this method will be executed when the numbers category is clicked on.
-            @Override
-            public void onClick(View view) {
-                // Create a new intent to open the {@link NumbersActivity}
-                Intent familyIntent = new Intent(MainActivity.this, FamilyActivity.class);
-                // Start the new activity
-                startActivity(familyIntent);
-            }
-        });
+        // Find the tab layout that shows the tabs
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-
-        //        onClick handler for Colours text
-        TextView colours = (TextView) findViewById(R.id.colours);
-        // Set a click listener on that View
-        colours.setOnClickListener(new OnClickListener() {
-            // The code in this method will be executed when the numbers category is clicked on.
-            @Override
-            public void onClick(View view) {
-                // Create a new intent to open the {@link NumbersActivity}
-                Intent coloursIntent = new Intent(MainActivity.this, ColoursActivity.class);
-                // Start the new activity
-                startActivity(coloursIntent);
-            }
-        });
-
-
-        //        onClick handler for Phrases text
-        TextView phrases = (TextView) findViewById(R.id.phrases);
-        // Set a click listener on that View
-        phrases.setOnClickListener(new OnClickListener() {
-            // The code in this method will be executed when the numbers category is clicked on.
-            @Override
-            public void onClick(View view) {
-                // Create a new intent to open the {@link NumbersActivity}
-                Intent phrasesIntent = new Intent(MainActivity.this, PhrasesActivity.class);
-                // Start the new activity
-                startActivity(phrasesIntent);
-            }
-        });
+        // Connect the tab layout with the view pager. This will
+        //   1. Update the tab layout when the view pager is swiped
+        //   2. Update the view pager when a tab is selected
+        //   3. Set the tab layout's tab names with the view pager's adapter's titles
+        //      by calling onPageTitle()
+        tabLayout.setupWithViewPager(viewPager);
     }
 }

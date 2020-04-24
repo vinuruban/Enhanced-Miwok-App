@@ -35,6 +35,7 @@ public class FamilyFragment extends Fragment {
 
     private AudioManager.OnAudioFocusChangeListener afChangeListener =
             new AudioManager.OnAudioFocusChangeListener() {
+                @Override
                 public void onAudioFocusChange(int focusChange) {
                     if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
                         mediaPlayer.pause();
@@ -104,13 +105,13 @@ public class FamilyFragment extends Fragment {
     public void onStop() {
         super.onStop();
         releaseMediaPlayer();
-        audioManager.abandonAudioFocus(afChangeListener);
     }
 
     private void releaseMediaPlayer() {
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
+            audioManager.abandonAudioFocus(afChangeListener);
         }
     }
 

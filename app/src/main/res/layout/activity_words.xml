@@ -6,4 +6,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:drawSelectorOnTop="true"/>
-<!--See comments about drawSelectorOnTop in activity_main.xml and list_item.xml-->
+
+    <!--This is the main layout. NumbersActivity displays this empty LinearLayout container. Within this container, NumbersFragment displays the activity_words xml container !!!!!!!!!!!!!!! -->

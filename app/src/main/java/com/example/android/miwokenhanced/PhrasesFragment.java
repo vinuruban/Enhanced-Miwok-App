@@ -20,15 +20,14 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NumbersFragment extends Fragment {
+public class PhrasesFragment extends Fragment {
 
     private MediaPlayer mediaPlayer;
-
     private MediaPlayer.OnCompletionListener completeListener = new MediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(MediaPlayer mediaPlayer){
             releaseMediaPlayer();
-            Toast.makeText(getActivity(),"I'm done!",Toast.LENGTH_SHORT).show(); // "this" = NumbersFragment, so we changed it to getActivity() (which refers to NumberActivity)
+            Toast.makeText(getActivity(),"I'm done!",Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -49,7 +48,7 @@ public class NumbersFragment extends Fragment {
                 }
             };
 
-    public NumbersFragment() {
+    public PhrasesFragment() {
         // Required empty public constructor
     }
 
@@ -57,28 +56,26 @@ public class NumbersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_words, container, false); // NumbersActivity displays the activity_category.xml layout, and the NumbersFragment displays the activity_words.xml layout.
 
-        audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE); //"getActivity()." added in addition to the code from NumbersActivity. BTW, getActivity() = NumbersActivity !!!!!!!!!!!!!!!
+        View rootView = inflater.inflate(R.layout.activity_words, container, false);
+
+        audioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
         final ArrayList<Word> words = new ArrayList<Word>();
 
-        words.add(new Word("utti", "one", R.drawable.number_one, R.raw.number_one));
-        words.add(new Word("otiiko", "two", R.drawable.number_two, R.raw.number_two));
-        words.add(new Word("tolookosu", "three", R.drawable.number_three, R.raw.number_three));
-        words.add(new Word("oyyisa", "four", R.drawable.number_four, R.raw.number_four));
-        words.add(new Word("massokka", "five", R.drawable.number_five, R.raw.number_five));
-        words.add(new Word("temmoka", "six", R.drawable.number_six, R.raw.number_six));
-        words.add(new Word("kenekaku", "seven", R.drawable.number_seven, R.raw.number_seven));
-        words.add(new Word("kawinta", "eight", R.drawable.number_eight, R.raw.number_eight));
-        words.add(new Word("wo'e", "nine", R.drawable.number_nine, R.raw.number_nine));
-        words.add(new Word("na'aacha", "ten", R.drawable.number_ten, R.raw.number_ten));
+        words.add(new Word("minto wuksus", "Where are you going?", R.raw.phrase_where_are_you_going));
+        words.add(new Word("tinnә oyaase'nә", "What is your name?", R.raw.phrase_what_is_your_name));
+        words.add(new Word("oyaaset...", "My name is...", R.raw.phrase_my_name_is));
+        words.add(new Word("michәksәs?", "How are you feeling?", R.raw.phrase_how_are_you_feeling));
+        words.add(new Word("kuchi achit", "I’m feeling good.", R.raw.phrase_im_feeling_good));
+        words.add(new Word("әәnәs'aa?", "Are you coming?", R.raw.phrase_are_you_coming));
+        words.add(new Word("hәә’ әәnәm", "Yes, I’m coming.", R.raw.phrase_yes_im_coming));
+        words.add(new Word("әәnәm", "I’m coming.", R.raw.phrase_im_coming));
+        words.add(new Word("yoowutis", "Let’s go.", R.raw.phrase_lets_go));
+        words.add(new Word("әnni'nem", "Come here.", R.raw.phrase_come_here));
 
-
-        WordAdapter adapter = new WordAdapter(getActivity(), words, R.color.category_numbers); // "this" = NumbersFragment, so we changed it to getActivity() (which refers to NumberActivity)
-
-        ListView listView = (ListView) rootView.findViewById(R.id.list); //"rootview." added in addition to the code from NumbersActivity
-
+        WordAdapter adapter = new WordAdapter(getActivity(), words, R.color.category_phrases);
+        ListView listView = (ListView) rootView.findViewById(R.id.list);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -88,24 +85,18 @@ public class NumbersFragment extends Fragment {
 
                 releaseMediaPlayer();
 
-
-
                 int result = audioManager.requestAudioFocus(afChangeListener,
-
                         AudioManager.STREAM_MUSIC,
                         AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 
                 if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                    // Start playback
-                    mediaPlayer = MediaPlayer.create(getActivity(), word.getMediaResourceId()); // "this" = NumbersFragment, so we changed it to getActivity() (which refers to NumberActivity)
+                    mediaPlayer = MediaPlayer.create(getActivity(), word.getMediaResourceId());
                     mediaPlayer.start();
 
                     mediaPlayer.setOnCompletionListener(completeListener);
                 }
-
             }
         });
-
         return rootView;
     }
 

@@ -1,4 +1,4 @@
-package com.example.android.miwok;
+package com.example.android.miwokenhanced;
 
 public class Word {
     private int hasImage;

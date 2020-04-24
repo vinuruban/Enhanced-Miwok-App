@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.miwok;
+package com.example.android.miwokenhanced;
 
 import android.content.Context;
 import android.media.AudioManager;
@@ -27,14 +27,14 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class PhrasesActivity extends AppCompatActivity {
+public class ColoursActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
     private MediaPlayer.OnCompletionListener completeListener = new MediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(MediaPlayer mediaPlayer){
             releaseMediaPlayer();
-            Toast.makeText(PhrasesActivity.this,"I'm done!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(ColoursActivity.this,"I'm done!",Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -64,18 +64,16 @@ public class PhrasesActivity extends AppCompatActivity {
 
         final ArrayList<Word> words = new ArrayList<Word>();
 
-        words.add(new Word("minto wuksus", "Where are you going?", R.raw.phrase_where_are_you_going));
-        words.add(new Word("tinnә oyaase'nә", "What is your name?", R.raw.phrase_what_is_your_name));
-        words.add(new Word("oyaaset...", "My name is...", R.raw.phrase_my_name_is));
-        words.add(new Word("michәksәs?", "How are you feeling?", R.raw.phrase_how_are_you_feeling));
-        words.add(new Word("kuchi achit", "I’m feeling good.", R.raw.phrase_im_feeling_good));
-        words.add(new Word("әәnәs'aa?", "Are you coming?", R.raw.phrase_are_you_coming));
-        words.add(new Word("hәә’ әәnәm", "Yes, I’m coming.", R.raw.phrase_yes_im_coming));
-        words.add(new Word("әәnәm", "I’m coming.", R.raw.phrase_im_coming));
-        words.add(new Word("yoowutis", "Let’s go.", R.raw.phrase_lets_go));
-        words.add(new Word("әnni'nem", "Come here.", R.raw.phrase_come_here));
+        words.add(new Word("weṭeṭṭi", "red", R.drawable.color_red, R.raw.color_red));
+        words.add(new Word("chokokki", "green", R.drawable.color_green, R.raw.color_green));
+        words.add(new Word("ṭakaakki", "brown", R.drawable.color_brown, R.raw.color_brown));
+        words.add(new Word("ṭopoppi", "gray", R.drawable.color_gray, R.raw.color_gray));
+        words.add(new Word("kululli", "black", R.drawable.color_black, R.raw.color_black));
+        words.add(new Word("kelelli", "white", R.drawable.color_white, R.raw.color_white));
+        words.add(new Word("ṭopiisә", "dusty yellow", R.drawable.color_dusty_yellow, R.raw.color_dusty_yellow));
+        words.add(new Word("chiwiiṭә", "mustard yellow", R.drawable.color_mustard_yellow, R.raw.color_mustard_yellow));
 
-        WordAdapter adapter = new WordAdapter(this, words, R.color.category_phrases);
+        WordAdapter adapter = new WordAdapter(this, words, R.color.category_colors);
         ListView listView = (ListView) findViewById(R.id.list);
         listView.setAdapter(adapter);
 
@@ -91,13 +89,14 @@ public class PhrasesActivity extends AppCompatActivity {
                         AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 
                 if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                    mediaPlayer = MediaPlayer.create(PhrasesActivity.this, word.getMediaResourceId());
+                    mediaPlayer = MediaPlayer.create(ColoursActivity.this, word.getMediaResourceId());
                     mediaPlayer.start();
 
                     mediaPlayer.setOnCompletionListener(completeListener);
                 }
             }
         });
+
     }
 
     @Override

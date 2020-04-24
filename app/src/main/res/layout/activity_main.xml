@@ -20,7 +20,7 @@
     android:layout_height="match_parent"
     android:background="@color/tan_background"
     android:orientation="vertical"
-    tools:context="com.example.android.miwok.MainActivity">
+    tools:context="com.example.android.miwokenhanced.MainActivity">
 
 <!--    FrameLayout is wrapped around each category since we want 2 android:background - "@color/category_numbers" and "?android:attr/selectableItemBackground"-->
 <!--    Instead of doing the same in the list_view.xml, we simply put one line of code in activity_words.xml which does the same job! - android:drawSelectorOnTop="true"-->

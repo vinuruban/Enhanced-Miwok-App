@@ -1,15 +1,11 @@
-package com.example.android.miwok;
+package com.example.android.miwokenhanced;
 
 import android.app.Activity;
-import android.media.MediaPlayer;
 import android.support.v4.content.ContextCompat;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
